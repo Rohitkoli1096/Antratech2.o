@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Flashcard Revision System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            max-width: 700px;
+            width: 100%;
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            color: #999;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 30px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left 0.5s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+        }
+        
+        .card:hover::before {
+            left: 100%;
+        }
+        
+        .card.flipped {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 15px 35px rgba(245, 87, 108, 0.3);
+        }
+        
+        .card-text {
+            font-size: 28px;
+            font-weight: bold;
+            word-wrap: break-word;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .flip-hint {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .progress-section {
+            margin-top: 35px;
+        }
+        
+        .progress-text {
+            text-align: center;
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+        
+        .info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Flashcard Mastery</h1>
+            <p class="subtitle">Professional Revision System</p>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value" id="current">1</div>
+                <div class="stat-label">Current</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="total">5</div>
+                <div class="stat-label">Total Cards</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="remaining">5</div>
+                <div class="stat-label">Remaining</div>
+            </div>
+        </div>
+        
+        <div class="card" id="card" onclick="flipCard()">
+            <div class="card-text" id="cardText">Click card to begin</div>
+            <div class="card-label" id="cardLabel"></div>
+            <div class="flip-hint">Click to reveal answer</div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="previousCard()">← Previous</button>
+            <button onclick="flipCard()">🔄 Flip</button>
+            <button onclick="nextCard()">Next →</button>
+            <button onclick="shuffleCards()">🔀 Shuffle</button>
+        </div>
+        
+        <div class="progress-section">
+            <div class="progress-text">Progress</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="info">Press spacebar to flip cards quickly</div>
+    </div>
+
+    <script>
+        let flashcards = [
+            { question: "What is the capital of France?", answer: "Paris" },
+            { question: "What is 2 + 2?", answer: "4" },
+            { question: "What is the largest planet?", answer: "Jupiter" },
+            { question: "Who wrote Romeo and Juliet?", answer: "William Shakespeare" },
+            { question: "What is H2O?", answer: "Water" }
+        ];
+        
+        let currentIndex = 0;
+        let isFlipped = false;
+        
+        function init() {
+            document.getElementById('total').textContent = flashcards.length;
+            showCard();
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    flipCard();
+                }
+            });
+        }
+        
+        function updateUI() {
+            const progress = ((currentIndex + 1) / flashcards.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('remaining').textContent = flashcards.length - currentIndex;
+        }
+        
+        function showCard() {
+            if (flashcards.length === 0) return;
+            
+            const card = flashcards[currentIndex];
+            const cardText = document.getElementById('cardText');
+            const cardLabel = document.getElementById('cardLabel');
+            const cardElement = document.getElementById('card');
+            
+            isFlipped = false;
+            cardElement.classList.remove('flipped');
+            cardText.textContent = card.question;
+            cardLabel.textContent = 'QUESTION';
+            document.getElementById('current').textContent = currentIndex + 1;
+            updateUI();
+        }
+        
+        function flipCard() {
+            const card = flashcards[currentIndex];
+            const cardText = document.getElementById('cardText');
+            const cardLabel = document.getElementById('cardLabel');
+            const cardElement = document.getElementById('card');
+            
+            isFlipped = !isFlipped;
+            
+            if (isFlipped) {
+                cardElement.classList.add('flipped');
+                cardText.textContent = card.answer;
+                cardLabel.textContent = 'ANSWER';
+            } else {
+                cardElement.classList.remove('flipped');
+                cardText.textContent = card.question;
+                cardLabel.textContent = 'QUESTION';
+            }
+        }
+        
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % flashcards.length;
+            showCard();
+        }
+        
+        function previousCard() {
+            currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+            showCard();
+        }
+        
+        function shuffleCards() {
+            for (let i = flashcards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+            }
+            currentIndex = 0;
+            showCard();
+        }
+        
+        init();
+    </script>
+</body>
+</html>

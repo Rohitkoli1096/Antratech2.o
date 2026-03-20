@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduMorph – Smart Learning Platform</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,Arial,sans-serif;
+}
+
+body{
+background:#f4f9ff;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 60px;
+background:#fff;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-weight:700;
+font-size:22px;
+color:#0d47a1;
+}
+
+.menu{
+display:flex;
+gap:30px;
+font-weight:500;
+}
+
+.menuItem{
+position:relative;
+cursor:pointer;
+color:#444;
+}
+
+.menuItem:hover{
+color:#0d47a1;
+}
+
+.dropdown{
+position:absolute;
+top:35px;
+left:0;
+background:#fff;
+width:220px;
+padding:20px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+display:none;
+flex-direction:column;
+gap:12px;
+}
+
+.menuItem:hover .dropdown{
+display:flex;
+}
+
+.dropdown a{
+text-decoration:none;
+color:#555;
+font-size:14px;
+}
+
+.dropdown a:hover{
+color:#0d47a1;
+}
+
+.actions{
+display:flex;
+gap:20px;
+align-items:center;
+}
+
+.quoteBtn{
+background:#0d47a1;
+color:#fff;
+border:none;
+padding:10px 20px;
+border-radius:25px;
+font-weight:600;
+cursor:pointer;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+padding:100px 60px 120px;
+background:linear-gradient(120deg,#0f2027,#203a43,#2c5364);
+color:#fff;
+position:relative;
+}
+
+.heroContent{
+max-width:650px;
+}
+
+.hero h1{
+font-size:52px;
+line-height:1.1;
+font-weight:800;
+}
+
+.hero p{
+margin-top:20px;
+font-size:20px;
+opacity:.9;
+}
+
+.stateBox{
+margin-top:30px;
+}
+
+.stateBox select{
+padding:14px 18px;
+border-radius:12px;
+border:none;
+font-size:16px;
+width:280px;
+cursor:pointer;
+}
+
+/* ================= FEATURES ================= */
+
+.featuresSection{
+padding:100px 60px;
+text-align:center;
+}
+
+.featuresSection h2{
+font-size:40px;
+margin-bottom:60px;
+color:#0d47a1;
+}
+
+.featuresGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:40px;
+}
+
+.featureCard{
+background:#fff;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+transition:.3s;
+}
+
+.featureCard:hover{
+transform:translateY(-10px);
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+.featureCard img{
+width:80px;
+margin-bottom:20px;
+}
+.loginBtn{
+text-decoration:none;
+color:#0d47a1;
+font-weight:600;
+cursor:pointer;
+}
+
+.loginBtn:hover{
+text-decoration:underline;
+}
+.featureCard h3{
+margin-bottom:15px;
+color:#203a43;
+}
+
+.featureCard p{
+font-size:14px;
+color:#555;
+margin-bottom:20px;
+}
+
+.featureCard button{
+padding:10px 25px;
+border-radius:25px;
+border:2px solid #0d47a1;
+background:transparent;
+color:#0d47a1;
+cursor:pointer;
+font-weight:600;
+}
+
+.featureCard button:hover{
+background:#0d47a1;
+color:#fff;
+}
+
+/* ================= BLOG ================= */
+
+.blogSection{
+padding:100px 60px;
+background:#eef6fb;
+text-align:center;
+}
+
+.blogSection h2{
+font-size:38px;
+margin-bottom:50px;
+color:#0d47a1;
+}
+
+.blogGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:40px;
+margin-bottom:40px;
+}
+
+.blogCard{
+background:#fff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+text-align:left;
+transition:.3s;
+}
+
+.blogCard:hover{
+transform:translateY(-8px);
+}
+
+.blogCard img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+.resourcesSection{
+padding:100px 60px;
+text-align:center;
+}
+
+.resourcesSection h2{
+font-size:38px;
+margin-bottom:50px;
+color:#0d47a1;
+}
+
+.resourcesGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:40px;
+}
+
+.resourceCard{
+background:#ffffff;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+transition:.3s;
+}
+
+.resourceCard:hover{
+transform:translateY(-8px);
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+.resourceCard h3{
+margin-bottom:15px;
+color:#203a43;
+}
+
+.resourceCard p{
+font-size:14px;
+color:#555;
+margin-bottom:20px;
+}
+
+.resourceCard a{
+text-decoration:none;
+color:#0d47a1;
+font-weight:600;
+}
+.blogCard h3{
+padding:20px;
+color:#203a43;
+}
+
+.blogCard p{
+padding:0 20px 20px;
+font-size:14px;
+color:#555;
+}
+
+.blogCard a{
+padding:0 20px 25px;
+display:block;
+color:#0d47a1;
+font-weight:600;
+text-decoration:none;
+}
+
+.viewMore{
+padding:12px 35px;
+border:none;
+border-radius:30px;
+background:#0d47a1;
+color:#fff;
+font-weight:600;
+cursor:pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1000px){
+
+.navbar{
+padding:15px 20px;
+}
+
+.menu{
+display:none;
+}
+
+.hero{
+padding:60px 20px;
+text-align:center;
+}
+
+.featuresSection,
+.blogSection{
+padding:60px 20px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+<div class="logo">EduMorph</div>
+
+<div class="menu">
+
+<div class="menuItem">Platform ▾
+<div class="dropdown">
+<a href="#">Adaptive Learning</a>
+<a href="#">AI Practice Engine</a>
+<a href="#">Performance Dashboard</a>
+</div>
+</div>
+
+<div class="menuItem">Solutions ▾
+<div class="dropdown">
+<a href="#">For Schools</a>
+<a href="#">For Teachers</a>
+<a href="#">For Students</a>
+</div>
+</div>
+
+<div class="menuItem">Resources ▾
+<div class="dropdown">
+<a href="#">Blog</a>
+<a href="#">Guides</a>
+<a href="#">Case Studies</a>
+</div>
+</div>
+
+<div class="menuItem">Company ▾
+<div class="dropdown">
+<a href="#">About Us</a>
+<a href="#">Careers</a>
+<a href="#">Contact</a>
+</div>
+</div>
+
+</div>
+
+<div class="actions">
+<a href="login.html" class="loginBtn">Login</a>
+<button class="quoteBtn">Get Started</button>
+</div>
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+<div class="heroContent">
+<h1>Transforming Classrooms with Intelligent Learning</h1>
+<p>
+EduMorph empowers educators and students with AI-driven practice,
+attendance engagement, and real-time performance tracking.
+</p>
+
+<div class="stateBox">
+<select id="stateSelect">
+<option value="">Select Your State</option>
+
+<option>Alabama</option>
+<option>Alaska</option>
+<option>Arizona</option>
+<option>Arkansas</option>
+<option>California</option>
+<option>Colorado</option>
+<option>Connecticut</option>
+<option>Delaware</option>
+<option>Florida</option>
+<option>Georgia</option>
+<option>Hawaii</option>
+<option>Idaho</option>
+<option>Illinois</option>
+<option>Indiana</option>
+<option>Iowa</option>
+<option>Kansas</option>
+<option>Kentucky</option>
+<option>Louisiana</option>
+<option>Maine</option>
+<option>Maryland</option>
+<option>Massachusetts</option>
+<option>Michigan</option>
+<option>Minnesota</option>
+<option>Mississippi</option>
+<option>Missouri</option>
+<option>Montana</option>
+<option>Nebraska</option>
+<option>Nevada</option>
+<option>New Hampshire</option>
+<option>New Jersey</option>
+<option>New Mexico</option>
+<option>New York</option>
+<option>North Carolina</option>
+<option>North Dakota</option>
+<option>Ohio</option>
+<option>Oklahoma</option>
+<option>Oregon</option>
+<option>Pennsylvania</option>
+<option>Rhode Island</option>
+<option>South Carolina</option>
+<option>South Dakota</option>
+<option>Tennessee</option>
+<option>Texas</option>
+<option>Utah</option>
+<option>Vermont</option>
+<option>Virginia</option>
+<option>Washington</option>
+<option>West Virginia</option>
+<option>Wisconsin</option>
+<option>Wyoming</option>
+
+</select>
+</div>
+
+</div>
+</section>
+
+<!-- FEATURES -->
+
+<section class="featuresSection">
+<h2>Powerful Tools for Modern Classrooms</h2>
+
+<div class="featuresGrid">
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/test-passed.png"/>
+<h3>Smart Assessment Builder</h3>
+<p>Create and assign standards-aligned tests in minutes.</p>
+<button onclick="window.open('https://mettl.com/tech-hiring-and-skilling-platform/?ads_cmpid=1715659664&ads_adid=67892295820&ads_targetid=kwd-325656952683&ads_network=g&ads_creative=662750500725&ads_kw_term=online+assessment+creator&ads_adposition=&utm_source=adwords&utm_medium=ppc&utm_campaign=1715659664&gclid=Cj0KCQiAqeDMBhDcARIsAJEbU9TnWyXKzzpwvBNg6Kfks-DoAM24HnPm6Vubaofb65jewd8cB4R-5G4aAkGKEALw_wcB', '_blank')">Explore</button>
+</div>
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/artificial-intelligence.png"/>
+<h3>AI Practice Engine</h3>
+<p>Adaptive question sets personalized for each student.</p>
+<button onclick="window.open('https://mettl.com/tech-hiring-and-skilling-platform/?ads_cmpid=1715659664&ads_adid=67892295820&ads_targetid=kwd-325656952683&ads_network=g&ads_creative=662750500725&ads_kw_term=online+assessment+creator&ads_adposition=&utm_source=adwords&utm_medium=ppc&utm_campaign=1715659664&gclid=Cj0KCQiAqeDMBhDcARIsAJEbU9TnWyXKzzpwvBNg6Kfks-DoAM24HnPm6Vubaofb65jewd8cB4R-5G4aAkGKEALw_wcB', '_blank')">Explore</button>
+</div>
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/prize.png"/>
+<h3>Gamified Attendance</h3>
+<p>Reward consistency and encourage better participation.</p>
+<button onclick="window.open('https://chatgpt.com/codex', '_blank')">Explore</button>
+</div>
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/combo-chart.png"/>
+<h3>Advanced Analytics</h3>
+<p>Monitor progress with real-time dashboards and insights.</p>
+<button>Explore</button>
+</div>
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/classroom.png"/>
+<h3>Interactive Lesson Planner</h3>
+<p>Plan and schedule lessons aligned with state standards.</p>
+<button>Explore</button>
+</div>
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/report-card.png"/>
+<h3>Progress Reports</h3>
+<p>Generate downloadable reports for parents and teachers.</p>
+<button>Explore</button>
+</div>
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/video-call.png"/>
+<h3>Virtual Classroom</h3>
+<p>Conduct live interactive sessions with built-in tools.</p>
+<button>Explore</button>
+</div>
+
+<div class="featureCard">
+<img src="https://img.icons8.com/color/96/cloud.png"/>
+<h3>Cloud Backup</h3>
+<p>Securely store student data with automatic backups.</p>
+<button onclick="window.open('https://one.google.com/about/plans?utm_source=g1&utm_medium=paid_media&utm_campaign=storage&gclsrc=aw.ds&gad_source=1&gad_campaignid=22376019057&gbraid=0AAAAA-1nrE_1YJdDOcC2bu0WuTSim5Kjx&gclid=Cj0KCQiAqeDMBhDcARIsAJEbU9S83CZMHnlpi8dRUFEeMpSCsLX3cskjMg8GLA1HLfYsGIohQKFhDj4aAkZZEALw_wcB&g1_landing_page=0', '_blank')">Explore</button>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- BLOG -->
+
+<section class="blogSection">
+<h2>Insights & Educational Resources</h2>
+
+<div class="blogGrid">
+
+<div class="blogCard">
+<img src="https://images.unsplash.com/photo-1588072432836-e10032774350"/>
+<h3>Improving Student Outcomes with AI</h3>
+<p>How adaptive technology transforms classroom learning.</p>
+<a href="#">Read More →</a>
+</div>
+
+<div class="blogCard">
+<img src="https://images.unsplash.com/photo-1509062522246-3755977927d7"/>
+<h3>Gamification Strategies That Work</h3>
+<p>Why rewards increase engagement in schools.</p>
+<a href="#">Read More →</a>
+</div>
+
+
+</div>
+<section class="resourcesSection">
+
+<h2>Comprehensive Learning Resources</h2>
+
+<div class="resourcesGrid">
+
+<div class="resourceCard">
+<h3>Downloadable Worksheets</h3>
+<p>Printable worksheets aligned with curriculum standards.</p>
+<a href="#">Access Resources →</a>
+</div>
+
+<div class="resourceCard">
+<h3>Video Tutorials</h3>
+<p>Concept-based explanation videos for better understanding.</p>
+<a href="#">Watch Now →</a>
+</div>
+
+<div class="resourceCard">
+<h3>Teacher Webinars</h3>
+<p>Live and recorded sessions for professional development.</p>
+<a href="#">Join Webinar →</a>
+</div>
+
+<div class="resourceCard">
+<h3>Student Practice Bank</h3>
+<p>Thousands of MCQs categorized by difficulty level.</p>
+<a href="#">Start Practice →</a>
+</div>
+
+<div class="resourceCard">
+<h3>Parent Guides</h3>
+<p>Guides to help parents support student learning at home.</p>
+<a href="#">Read Guide →</a>
+</div>
+
+<div class="resourceCard">
+<h3>Case Studies</h3>
+<p>Success stories from schools using EduMorph.</p>
+<a href="#">Explore →</a>
+</div>
+
+</div>
+
+</section>
+
+<button class="viewMore">View More</button>
+
+</section>
+
+<script>
+
+const stateSelect = document.getElementById("stateSelect");
+
+window.onload = function(){
+const savedState = localStorage.getItem("selectedState");
+if(savedState){
+stateSelect.value = savedState;
+}
+};
+
+stateSelect.addEventListener("change", function(){
+if(this.value !== ""){
+localStorage.setItem("selectedState", this.value);
+alert("EduMorph is now customized for " + this.value);
+}
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Learning Activities</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+
+body{
+background:#f4f9ff;
+color:#333;
+min-height:100vh;
+padding:50px 90px;
+}
+
+/* BACK */
+.back-link{
+display:flex;
+align-items:center;
+gap:8px;
+color:#0d47a1;
+font-weight:500;
+margin-bottom:25px;
+cursor:pointer;
+transition:.3s;
+}
+.back-link:hover{color:#1565c0;transform:translateX(-5px);}
+
+/* HEADER */
+.header h1{font-size:34px;font-weight:700;color:#0d47a1;}
+.header p{opacity:.6;margin-top:6px;margin-bottom:35px;}
+
+.bonus{
+background:linear-gradient(135deg,#0d47a1,#1565c0);
+padding:40px;
+border-radius:24px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+color:#fff;
+}
+
+.bonus small{
+background:#ff7a18;
+padding:6px 14px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+}
+
+.bonus h2{margin-top:12px;font-size:24px;}
+.bonus p{margin-top:6px;opacity:.9;}
+
+.bonus-icon{
+width:70px;height:70px;
+border-radius:50%;
+background:rgba(255,255,255,.2);
+display:flex;align-items:center;justify-content:center;
+font-size:28px;color:#fff;
+}
+
+.activities{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+margin-bottom:60px;
+}
+
+.activity-card{
+background:#fff;
+padding:30px;
+border-radius:22px;
+transition:.4s;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+border:1px solid #e6eef8;
+position:relative;
+box-shadow:0 8px 20px rgba(0,0,0,0.04);
+}
+
+.activity-card:hover{
+transform:translateY(-8px);
+border-color:#0d47a1;
+box-shadow:0 15px 35px rgba(0,0,0,.08);
+}
+
+.activity-top{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:15px;
+}
+
+.icon{
+width:55px;height:55px;
+border-radius:16px;
+display:flex;align-items:center;justify-content:center;
+font-size:24px;color:#fff;
+}
+
+.blue{background:linear-gradient(135deg,#14c1d7,#3c8cff);}
+.purple{background:linear-gradient(135deg,#7b2ff7,#c86dd7);}
+.pink{background:linear-gradient(135deg,#ff4ecd,#ff7a18);}
+.green{background:linear-gradient(135deg,#10b981,#22c55e);}
+
+.activity-card h3{font-size:20px;margin-bottom:8px;color:#0d47a1;}
+.activity-card p{opacity:.7;font-size:14px;margin-bottom:15px;}
+
+.badges{
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:20px;
+}
+
+.badge{
+padding:6px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+}
+
+.medium{background:rgba(250,204,21,.15);color:#f59e0b;}
+.lucky{background:rgba(139,92,246,.15);color:#7b2ff7;}
+.hard{background:rgba(239,68,68,.15);color:#ef4444;}
+.easy{background:rgba(16,185,129,.15);color:#10b981;}
+
+.xp{
+color:#f59e0b;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:5px;
+}
+
+.activity-card button{
+padding:14px;
+border-radius:12px;
+border:none;
+background:#eef3f9;
+color:#333;
+cursor:pointer;
+font-weight:500;
+transition:.3s;
+}
+.activity-card button:hover{
+background:#0d47a1;
+color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="back-link" onclick="window.location.href='dashboard.html'">
+<i class='bx bx-arrow-back'></i> Back to Dashboard
+</div>
+
+<div class="header">
+<h1>Fun Learning Activities</h1>
+<p>Make learning exciting with gamified challenges and rewards</p>
+</div>
+
+<div class="bonus">
+<div>
+<small>🎁 DAILY BONUS</small>
+<h2>Claim Your Daily Reward!</h2>
+<p>Complete any activity today to unlock a special bonus reward</p>
+</div>
+<div class="bonus-icon">
+<i class='bx bxs-gift'></i>
+</div>
+</div>
+
+<div class="activities">
+
+<div class="activity-card">
+<div>
+<div class="activity-top">
+<div class="icon blue"><i class='bx bxs-timer'></i></div>
+<h3>Rapid Fire Mode</h3>
+</div>
+<p>60-second lightning round! Answer as many questions as you can before time runs out.</p>
+<div class="badges">
+<div class="badge medium">Medium</div>
+<div class="xp"><i class='bx bxs-bolt'></i>50-100 XP</div>
+</div>
+</div>
+<button>Start Activity →</button>
+</div>
+
+<!-- ✅ SPIN CARD UPDATED -->
+<div class="activity-card">
+<div>
+<div class="activity-top">
+<div class="icon purple"><i class='bx bxs-disc'></i></div>
+<h3>Spin the Reward Wheel</h3>
+</div>
+<p>Test your luck! Spin the wheel for random XP rewards and bonuses.</p>
+<div class="badges">
+<div class="badge lucky">Lucky</div>
+<div class="xp"><i class='bx bxs-bolt'></i>10-50 XP</div>
+</div>
+</div>
+<button onclick="window.location.href='spin.html'">Start Activity →</button>
+</div>
+
+<div class="activity-card">
+<div>
+<div class="activity-top">
+<div class="icon pink"><i class='bx bxs-shield-x'></i></div>
+<h3>Brain Battle Mode</h3>
+</div>
+<p>Challenge simulated opponents and compete for the highest score in head-to-head quiz battles.</p>
+<div class="badges">
+<div class="badge hard">Hard</div>
+<div class="xp"><i class='bx bxs-bolt'></i>100-200 XP</div>
+</div>
+</div>
+<button>Start Activity →</button>
+</div>
+
+<div class="activity-card">
+<div>
+<div class="activity-top">
+<div class="icon green"><i class='bx bxs-book'></i></div>
+<h3>Flashcard Revision</h3>
+</div>
+<p>Flip through flashcards and test your memory on key concepts.</p>
+<div class="badges">
+<div class="badge easy">Easy</div>
+<div class="xp"><i class='bx bxs-bolt'></i>30-60 XP</div>
+</div>
+</div>
+<button onclick="window.location.href='flashcard.html'">Start Activity →</button>
+</div>
+
+</div>
+
+</body>
+</html>

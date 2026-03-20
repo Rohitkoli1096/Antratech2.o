@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adaptive Data Structures Quiz</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+
+body{
+background:linear-gradient(120deg,#0f2027,#203a43,#2c5364);
+color:#fff;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+/* ===== NAVBAR ===== */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 50px;
+background:#fff;
+color:#0d47a1;
+}
+
+.navbar a{
+text-decoration:none;
+color:#0d47a1;
+font-weight:600;
+margin-left:20px;
+}
+
+/* ===== MAIN CONTAINER ===== */
+
+.main{
+flex:1;
+padding:40px 20px;
+}
+
+.container{
+max-width:950px;
+margin:auto;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
+border-radius:30px;
+padding:40px;
+border:1px solid rgba(255,255,255,0.15);
+box-shadow:0 30px 80px rgba(0,0,0,0.5);
+}
+
+/* ===== HEADER ===== */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:35px;
+}
+
+.back-btn{
+background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.2);
+color:#fff;
+padding:10px 16px;
+border-radius:30px;
+cursor:pointer;
+}
+
+.xp-badge{
+background:linear-gradient(90deg,#14c1d7,#7b2ff7);
+padding:10px 18px;
+border-radius:30px;
+font-weight:600;
+}
+
+/* ===== PROGRESS ===== */
+
+.progress-bar{
+height:8px;
+background:rgba(255,255,255,0.1);
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-fill{
+height:100%;
+background:linear-gradient(90deg,#14c1d7,#7b2ff7);
+transition:.4s ease;
+}
+
+/* ===== QUIZ CARD ===== */
+
+.quiz-card{
+background:rgba(255,255,255,0.04);
+padding:35px;
+border-radius:25px;
+border:1px solid rgba(255,255,255,0.15);
+margin-top:25px;
+}
+
+.difficulty-tag{
+background:linear-gradient(90deg,#14c1d7,#7b2ff7);
+padding:6px 14px;
+border-radius:20px;
+font-size:12px;
+}
+
+.category-tag{
+background:rgba(255,255,255,0.1);
+padding:6px 14px;
+border-radius:20px;
+font-size:12px;
+margin-left:8px;
+}
+
+.xp-reward{
+float:right;
+background:rgba(255,255,255,0.1);
+padding:6px 12px;
+border-radius:12px;
+font-size:13px;
+}
+
+.question-title{
+font-size:22px;
+margin:20px 0 25px;
+line-height:1.5;
+}
+
+.options-container{display:flex;flex-direction:column;gap:14px}
+
+.option{
+background:rgba(255,255,255,0.07);
+padding:16px;
+border-radius:14px;
+cursor:pointer;
+transition:.3s;
+border:1px solid transparent;
+}
+
+.option:hover{
+border-color:#14c1d7;
+transform:translateX(6px);
+}
+
+.option.selected{
+background:rgba(20,193,215,0.2);
+border-color:#14c1d7;
+}
+
+.option.correct{
+background:rgba(0,255,150,0.2);
+border-color:#00ff96;
+}
+
+.option.incorrect{
+background:rgba(255,80,80,0.2);
+border-color:#ff5050;
+}
+
+/* ===== BUTTONS ===== */
+
+.button-group{
+display:flex;
+justify-content:flex-end;
+gap:12px;
+margin-top:30px;
+}
+
+button{
+border:none;
+border-radius:30px;
+padding:14px 24px;
+font-weight:600;
+cursor:pointer;
+}
+
+.btn-submit{
+background:linear-gradient(90deg,#14c1d7,#7b2ff7);
+color:#fff;
+}
+
+.btn-next{
+background:rgba(255,255,255,0.08);
+color:#fff;
+border:1px solid rgba(255,255,255,0.2);
+}
+
+/* ===== RESULT MESSAGE ===== */
+
+.result-message{
+margin-top:20px;
+padding:14px;
+border-radius:12px;
+display:none;
+}
+
+.result-message.correct{
+background:rgba(0,255,150,0.15);
+color:#00ff96;
+}
+
+.result-message.incorrect{
+background:rgba(255,80,80,0.15);
+color:#ff6464;
+}
+
+/* ===== TIP ===== */
+
+.tip-box{
+background:rgba(20,193,215,0.15);
+border-left:4px solid #14c1d7;
+border-radius:10px;
+padding:15px;
+margin-top:18px;
+font-size:14px;
+display:none;
+}
+
+/* ===== MODAL ===== */
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+align-items:center;
+justify-content:center;
+}
+
+.modal.active{display:flex}
+
+.modal-content{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
+padding:40px;
+border-radius:25px;
+text-align:center;
+border:1px solid rgba(255,255,255,0.15);
+}
+
+.stat-box{
+background:rgba(255,255,255,0.07);
+padding:20px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+/* ===== FOOTER ===== */
+
+.footer{
+background:#0b1424;
+padding:20px;
+text-align:center;
+opacity:.7;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+<div><strong>EduMorph</strong></div>
+<div>
+<a href="dashboard.html">Dashboard</a>
+</div>
+</div>
+
+<div class="main">
+
+<div class="container">
+
+<div class="header">
+<button class="back-btn" onclick="goBack()">← Back</button>
+<div class="xp-badge">⭐ <span id="totalXP">0</span> XP</div>
+</div>
+
+<div>
+Question <span id="currentQuestion">1</span> of 5
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+</div>
+
+<div class="quiz-card">
+
+<div>
+<span class="difficulty-tag" id="difficulty"></span>
+<span class="category-tag">Data Structures</span>
+<div class="xp-reward">+<span id="questionXP"></span> XP</div>
+<div style="clear:both"></div>
+</div>
+
+<div class="question-title" id="questionText"></div>
+<div class="options-container" id="optionsContainer"></div>
+
+<div class="result-message" id="resultMessage"></div>
+
+<div class="tip-box" id="tipBox">
+💡 <span id="tipText"></span>
+</div>
+
+<div class="button-group">
+<button class="btn-submit" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
+<button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="display:none">Next →</button>
+<button class="btn-submit" id="finalSubmitBtn" onclick="showResults()" style="display:none">Submit Quiz ✓</button>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- ===== RESULT MODAL ===== -->
+<div class="modal" id="resultModal">
+<div class="modal-content">
+<h2>🎉 Quiz Submitted Successfully</h2>
+<div class="stat-box">Correct Answers: <span id="correctCount">0</span>/5</div>
+<div class="stat-box">XP Earned: <span id="totalXPEarned">0</span></div>
+<button class="btn-submit" onclick="goBack()">Go to Dashboard →</button>
+</div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+© 2026 EduMorph Adaptive Learning Platform
+</div>
+
+<script>
+
+const quizData=[
+{question:"Which data structure uses LIFO?",options:["Queue","Stack","Array","Tree"],correct:1,difficulty:"Easy",xp:10,tip:"Stack uses LIFO."},
+{question:"Binary search complexity?",options:["O(n)","O(log n)","O(n²)","O(n log n)"],correct:1,difficulty:"Medium",xp:15,tip:"Binary search halves space."},
+{question:"Priority queue uses?",options:["Linked List","Array","Heap","Graph"],correct:2,difficulty:"Medium",xp:15,tip:"Heap manages priority."},
+{question:"Average QuickSort?",options:["O(n log n)","O(n²)","O(n)","O(2^n)"],correct:0,difficulty:"Hard",xp:20,tip:"Divide & conquer."},
+{question:"Left-root-right traversal?",options:["Pre","In","Post","Level"],correct:1,difficulty:"Easy",xp:10,tip:"In-order traversal."}
+];
+
+let currentQ=0,score=0,selectedAnswer=null,totalXPEarned=0;
+
+function loadQuestion(){
+const q=quizData[currentQ];
+
+document.getElementById("currentQuestion").innerText=currentQ+1;
+document.getElementById("progressFill").style.width=((currentQ+1)/quizData.length*100)+"%";
+document.getElementById("questionText").innerText=q.question;
+document.getElementById("difficulty").innerText=q.difficulty;
+document.getElementById("questionXP").innerText=q.xp;
+
+const container=document.getElementById("optionsContainer");
+container.innerHTML="";
+
+q.options.forEach((opt,i)=>{
+let div=document.createElement("div");
+div.className="option";
+div.innerText=opt;
+div.onclick=()=>selectAnswer(i);
+container.appendChild(div);
+});
+
+document.getElementById("resultMessage").style.display="none";
+document.getElementById("tipBox").style.display="none";
+document.getElementById("submitBtn").style.display="block";
+document.getElementById("nextBtn").style.display="none";
+document.getElementById("finalSubmitBtn").style.display="none";
+selectedAnswer=null;
+}
+
+function selectAnswer(index){
+selectedAnswer=index;
+document.querySelectorAll(".option").forEach((o,i)=>o.classList.toggle("selected",i===index));
+}
+
+function submitAnswer(){
+if(selectedAnswer===null)return;
+const q=quizData[currentQ];
+const isCorrect=selectedAnswer===q.correct;
+
+document.querySelectorAll(".option").forEach((opt,i)=>{
+opt.style.pointerEvents="none";
+if(i===q.correct)opt.classList.add("correct");
+if(i===selectedAnswer&&!isCorrect)opt.classList.add("incorrect");
+});
+
+let msg=document.getElementById("resultMessage");
+msg.style.display="block";
+
+if(isCorrect){
+msg.className="result-message correct";
+msg.innerText="✓ Correct!";
+score++;
+totalXPEarned+=q.xp;
+document.getElementById("totalXP").innerText=totalXPEarned;
+}else{
+msg.className="result-message incorrect";
+msg.innerText="✗ Incorrect";
+}
+
+document.getElementById("tipBox").style.display="block";
+document.getElementById("tipText").innerText=q.tip;
+
+document.getElementById("submitBtn").style.display="none";
+
+if(currentQ===quizData.length-1){
+document.getElementById("finalSubmitBtn").style.display="block";
+}else{
+document.getElementById("nextBtn").style.display="block";
+}
+}
+
+function nextQuestion(){currentQ++;loadQuestion();}
+
+function showResults(){
+document.getElementById("correctCount").innerText=score;
+document.getElementById("totalXPEarned").innerText=totalXPEarned;
+document.getElementById("resultModal").classList.add("active");
+}
+
+function goBack(){window.location.href="dashboard.html";}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>

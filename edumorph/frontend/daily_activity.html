@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Engagement Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+background:linear-gradient(135deg,#f4f9ff,#eaf2ff);
+color:#1e293b;
+font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto;
+padding:20px;
+}
+
+.container{max-width:1200px;margin:0 auto}
+
+.header{margin-bottom:30px}
+.back-link{color:#0d47a1;text-decoration:none;margin-bottom:10px;display:inline-block;font-weight:600;transition:.3s}
+.back-link:hover{text-decoration:underline;color:#1565c0}
+.header h1{font-size:32px;font-weight:700;margin:10px 0}
+.subtitle{color:#64748b}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;margin-bottom:30px;
+}
+
+.stat-card{
+background:#fff;
+border:1px solid #e2e8f0;
+border-radius:12px;
+padding:20px;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+transition:.3s;
+}
+
+.stat-card:hover{transform:translateY(-4px);box-shadow:0 8px 16px rgba(0,0,0,0.1)}
+
+.stat-card.streak{
+background:#fff7ed;
+border-color:#fed7aa;
+}
+
+.stat-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.stat-label{
+color:#0284c7;
+font-size:12px;
+text-transform:uppercase;
+font-weight:600;
+}
+
+.stat-value{
+font-size:32px;
+font-weight:bold;
+margin-top:10px;
+color:#0d47a1;
+}
+
+.alert-box{
+background:#fff7ed;
+border:1px solid #fed7aa;
+border-radius:12px;
+padding:20px;
+margin-bottom:30px;
+display:flex;
+gap:15px;
+animation:slideIn 0.5s;
+}
+
+.alert-icon{
+font-size:28px;
+background:#fb923c;
+width:50px;height:50px;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-shrink:0;
+}
+
+.alert-content h3{margin-bottom:8px;color:#ea580c;font-weight:600}
+.alert-content ul{list-style:none;font-size:13px;color:#475569}
+.alert-content li{margin:6px 0}
+
+.chart-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
+gap:20px;margin-bottom:30px;
+}
+
+.chart-card{
+background:#fff;
+border:1px solid #e2e8f0;
+border-radius:12px;
+padding:20px;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.chart-card h3{margin-bottom:20px;font-weight:600}
+
+.heatmap{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:8px;
+margin-top:15px;
+}
+
+.heatmap-day{text-align:center;font-size:11px;color:#64748b;margin-bottom:8px}
+
+.heatmap-cell{
+width:40px;height:40px;
+border-radius:6px;
+background:#e2e8f0;
+cursor:pointer;
+transition:.3s;
+}
+
+.heatmap-cell:hover{transform:scale(1.1)}
+
+.heatmap-cell.active{background:#0d47a1}
+.heatmap-cell.active-mid{background:#64b5f6}
+.heatmap-cell.active-low{background:#b3e5fc}
+
+.stats-footer{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:15px;margin-bottom:30px;
+}
+
+.footer-stat{
+background:#fff;
+border:1px solid #e2e8f0;
+border-radius:12px;
+padding:20px;
+text-align:center;
+transition:.3s;
+}
+
+.footer-stat:hover{box-shadow:0 8px 16px rgba(0,0,0,0.1);transform:translateY(-4px)}
+
+.footer-stat-value{
+font-size:28px;
+font-weight:bold;
+color:#0d47a1;
+}
+
+.footer-stat-label{
+font-size:12px;
+color:#64748b;
+margin-top:8px;
+font-weight:500;
+}
+
+.cta-section{
+background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+border-radius:12px;
+padding:40px;
+text-align:center;
+color:#fff;
+box-shadow:0 4px 15px rgba(30,58,138,0.2);
+}
+
+.cta-section h2{font-size:26px;margin-bottom:10px}
+.cta-section p{color:rgba(255,255,255,0.9);margin-bottom:20px}
+
+.btn{
+background:#fff;
+color:#1d4ed8;
+border:none;
+padding:12px 30px;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+font-size:14px;
+}
+
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.btn:disabled{opacity:0.6;cursor:not-allowed}
+
+@keyframes slideIn{
+from{transform:translateX(-20px);opacity:0}
+to{transform:translateX(0);opacity:1}
+}
+
+@media(max-width:768px){
+.chart-grid{grid-template-columns:1fr}
+.stats-grid{grid-template-columns:1fr}
+.cta-section{padding:30px 20px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+<h1>Daily Engagement Tracker</h1>
+<p class="subtitle">Monitor your learning consistency and maintain your streak</p>
+</div>
+
+<div class="stats-grid">
+<div class="stat-card streak">
+<div class="stat-header"><span class="stat-label">🔥 Active</span></div>
+<div class="stat-value" id="currentStreak">0</div>
+<p style="color:#ea580c;font-size:12px;margin-top:8px;">Current Streak</p>
+</div>
+
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">🏆 Record</span></div>
+<div class="stat-value" id="longestStreak">0</div>
+<p style="color:#0d47a1;font-size:12px;margin-top:8px;">Longest Streak</p>
+</div>
+
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">⭐ Today's XP</span></div>
+<div class="stat-value" id="todayXP">0</div>
+<p style="color:#0d47a1;font-size:12px;margin-top:8px;">Daily Progress</p>
+</div>
+</div>
+
+<div class="alert-box">
+<div class="alert-icon">⚠️</div>
+<div class="alert-content">
+<h3>📋 Streak Rules</h3>
+<ul>
+<li>✓ Daily activity: +10 XP</li>
+<li>⚠ 1 day inactive: -5 XP</li>
+<li>✗ 2+ days inactive: Streak resets</li>
+<li>🎯 Every 7 days: Bonus +50 XP</li>
+</ul>
+</div>
+</div>
+
+<div class="chart-grid">
+<div class="chart-card">
+<h3>📊 Activity Heatmap (Last 30 Days)</h3>
+<div class="heatmap" id="activityHeatmap"></div>
+</div>
+
+<div class="chart-card">
+<h3>📈 Weekly XP History</h3>
+<canvas id="weeklyChart"></canvas>
+</div>
+</div>
+
+<div class="stats-footer">
+<div class="footer-stat">
+<div class="footer-stat-value" id="activeDays">0</div>
+<div class="footer-stat-label">Active Days</div>
+</div>
+<div class="footer-stat">
+<div class="footer-stat-value" id="missedDays">0</div>
+<div class="footer-stat-label">Missed Days</div>
+</div>
+<div class="footer-stat">
+<div class="footer-stat-value" id="totalXPEarned">0</div>
+<div class="footer-stat-label">Total XP Earned</div>
+</div>
+<div class="footer-stat">
+<div class="footer-stat-value" id="consistencyRate">0%</div>
+<div class="footer-stat-label">Consistency Rate</div>
+</div>
+</div>
+
+<div class="cta-section">
+<h2>🚀 Keep Your Momentum Going!</h2>
+<p>Complete a quiz or activity to extend your streak and earn bonus XP</p>
+<button class="btn" onclick="window.location.href='challenges.html'">Start Daily Challenge</button>
+</div>
+
+</div>
+
+<script>
+
+/* ===== LOAD USER DATA ===== */
+const user = JSON.parse(localStorage.getItem("edumorphUser")) || {
+    name: "Alex Johnson",
+    totalXP: 2450,
+    streak: 7,
+    attendance: 94
+};
+
+/* ===== ACTIVITY LOG ===== */
+let activityLog = JSON.parse(localStorage.getItem("activityLog")) || 
+    Array(30).fill(0).map(() => Math.floor(Math.random() * 100));
+
+/* ===== GENERATE HEATMAP ===== */
+function generateHeatmap() {
+    const heatmap = document.getElementById("activityHeatmap");
+    heatmap.innerHTML = '';
+    
+    // Add day labels
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const weeks = Math.ceil(activityLog.length / 7);
+    
+    for (let w = 0; w < weeks; w++) {
+        for (let d = 0; d < 7; d++) {
+            const idx = w * 7 + d;
+            if (idx < activityLog.length) {
+                const cell = document.createElement("div");
+                cell.className = "heatmap-cell";
+                const xp = activityLog[idx];
+                
+                if (xp >= 80) cell.classList.add("active");
+                else if (xp >= 40) cell.classList.add("active-mid");
+                else if (xp > 0) cell.classList.add("active-low");
+                
+                cell.title = `${xp} XP earned`;
+                heatmap.appendChild(cell);
+            }
+        }
+    }
+}
+
+/* ===== UPDATE ALL STATS ===== */
+function updateStats() {
+    // Streak
+    document.getElementById("currentStreak").innerText = user.streak;
+    document.getElementById("longestStreak").innerText = Math.ceil(user.totalXP / 500);
+    
+    // Today's XP (from last entry in activityLog)
+    const todayXP = activityLog[activityLog.length - 1] || 0;
+    document.getElementById("todayXP").innerText = "+" + todayXP;
+    
+    // Total XP
+    document.getElementById("totalXPEarned").innerText = user.totalXP.toLocaleString();
+    
+    // Activity stats
+    const activeDays = activityLog.filter(x => x > 0).length;
+    const missedDays = activityLog.filter(x => x === 0).length;
+    const consistency = Math.round((activeDays / activityLog.length) * 100);
+    
+    document.getElementById("activeDays").innerText = activeDays;
+    document.getElementById("missedDays").innerText = missedDays;
+    document.getElementById("consistencyRate").innerText = consistency + "%";
+}
+
+/* ===== WEEKLY CHART ===== */
+function createWeeklyChart() {
+    const weeklyData = [];
+    const lastWeek = activityLog.slice(-7);
+    
+    for (let i = 0; i < 7; i++) {
+        weeklyData.push(lastWeek[i] || 0);
+    }
+    
+    const ctx = document.getElementById('weeklyChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Daily XP',
+                data: weeklyData,
+                borderColor: '#0d47a1',
+                backgroundColor: 'rgba(13,71,161,0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#0d47a1',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { color: '#64748b' },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: { color: '#64748b' },
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+}
+
+/* ===== SAVE ACTIVITY ===== */
+function saveActivity() {
+    localStorage.setItem("activityLog", JSON.stringify(activityLog));
+}
+
+/* ===== ADD DAILY XP ===== */
+function addDailyXP(amount) {
+    activityLog[activityLog.length - 1] = amount;
+    saveActivity();
+    updateStats();
+    generateHeatmap();
+}
+
+/* ===== INIT ===== */
+generateHeatmap();
+updateStats();
+createWeeklyChart();
+
+// Simulate daily activity update
+window.addEventListener('load', () => {
+    console.log("Daily Engagement Tracker loaded");
+    console.log("User Data:", user);
+});
+
+</script>
+
+</body>
+</html>

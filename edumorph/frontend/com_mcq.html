@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Diagnostic Assessment | EduMorph</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif
+        }
+
+        body {
+            background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 60px;
+            background: #fff;
+            color: #0d47a1;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #0d47a1;
+            font-weight: 600;
+        }
+
+        /* CONTAINER */
+        .container {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 30px
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 8px
+        }
+
+        .header p {
+            opacity: .7
+        }
+
+        /* PROGRESS */
+        .progress-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            flex: 1;
+            margin: 0 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+            transition: .4s ease;
+        }
+
+        .timer {
+            color: #14c1d7;
+            font-weight: 600
+        }
+
+        /* QUIZ CARD */
+        .card {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: fadeUp .6s ease;
+        }
+
+        .topic {
+            display: inline-block;
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-size: 22px;
+            margin-bottom: 25px
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: .3s;
+            border: 1px solid transparent;
+        }
+
+        .option:hover {
+            border-color: #14c1d7;
+            transform: translateX(5px)
+        }
+
+        .option.selected {
+            background: rgba(20, 193, 215, 0.2);
+            border-color: #14c1d7;
+        }
+
+        .next-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+            color: #fff;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px)
+        }
+
+        /* RESULT */
+        #resultSection {
+            display: none;
+            margin-top: 50px
+        }
+
+        .circle-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 20px auto;
+        }
+
+        .circle-svg {
+            transform: rotate(-90deg)
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 12;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: url(#gradStroke);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: 1.5s ease;
+        }
+
+        .percent-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-excellent {
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+        }
+
+        .status-good {
+            background: linear-gradient(90deg, #ff9a00, #ff5e00);
+        }
+
+        .status-poor {
+            background: linear-gradient(90deg, #ff4ecd, #ff2e63);
+        }
+
+        .breakdown {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .metric {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 20px;
+        }
+
+        .metric-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+            width: 0%;
+            transition: 1s ease;
+        }
+
+        /* ANALYSIS CARDS */
+        .analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .analysis-card {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .skill-item {
+            margin-bottom: 20px
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #14c1d7, #7b2ff7);
+            width: 0%;
+            transition: 1s ease;
+        }
+
+        .footer {
+            background: #0b1424;
+            padding: 20px;
+            text-align: center;
+            opacity: .6;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @media(max-width:900px) {
+            .container {
+                padding: 20px
+            }
+
+            .navbar {
+                padding: 15px 20px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div><a href="index.html">EduMorph</a></div>
+        <div><a href="dashboard.html">Dashboard</a></div>
+    </div>
+
+    <div class="container">
+
+        <div class="header">
+            <div class="badge">Diagnostic Assessment</div>
+            <h1>Evaluating Your Knowledge</h1>
+            <p>Answer all questions to personalize your learning path</p>
+        </div>
+
+        <div class="progress-wrapper" id="progressWrapper">
+            <div>Question <span id="qNumber">1</span>/5</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="timer" id="timer">3:00</div>
+        </div>
+
+        <div class="card" id="quizCard">
+            <div class="topic">Data Structures</div>
+            <div class="question" id="questionText"></div>
+            <div id="optionsContainer"></div>
+            <button class="next-btn" onclick="nextQuestion()">Next Question →</button>
+        </div>
+
+        <div id="resultSection">
+
+            <div class="card">
+
+                <h2 style="text-align:center;">🎉 Assessment Complete</h2>
+
+                <div class="circle-wrapper">
+                    <svg class="circle-svg" width="180" height="180">
+                        <defs>
+                            <linearGradient id="gradStroke">
+                                <stop offset="0%" stop-color="#14c1d7" />
+                                <stop offset="100%" stop-color="#7b2ff7" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="circle-bg" cx="90" cy="90" r="70" />
+                        <circle class="circle-progress" id="circleProgress" cx="90" cy="90" r="70" />
+                    </svg>
+                    <div class="percent-text" id="percentText">0%</div>
+                </div>
+
+                <div style="text-align:center;">
+                    <span id="statusBadge" class="status-badge">Status</span>
+                </div>
+
+                <p style="text-align:center;opacity:.7;margin-top:15px;" id="resultText"></p>
+
+                <div class="analysis">
+
+                    <div class="analysis-card">
+                        <h3>🚀 Strength Areas</h3>
+                        <div id="strengthList"></div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>📈 Areas to Improve</h3>
+                        <div id="weakList"></div>
+                    </div>
+
+                </div>
+
+                <button class="next-btn" style="margin-top:40px;" onclick="window.location.href='dashboard.html'">
+                    Go to Dashboard →
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">© 2026 EduMorph. All Rights Reserved.</div>
+
+    <script>
+
+        const questions = [
+            { question: "Time complexity of inserting at beginning of linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], answer: 0 },
+            { question: "Which uses FIFO?", options: ["Stack", "Queue", "Tree", "Graph"], answer: 1 },
+            { question: "Binary search works on?", options: ["Unsorted", "Sorted", "Graph", "Tree"], answer: 1 },
+            { question: "LIFO is?", options: ["Queue", "Stack", "Array", "Tree"], answer: 1 },
+            { question: "Worst case of QuickSort?", options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"], answer: 2 }
+        ];
+
+        let current = 0, score = 0, selected = null, time = 180;
+
+        function loadQuestion() {
+            const q = questions[current];
+            document.getElementById("questionText").innerText = q.question;
+            document.getElementById("qNumber").innerText = current + 1;
+            document.getElementById("optionsContainer").innerHTML = "";
+            q.options.forEach((opt, i) => {
+                let div = document.createElement("div");
+                div.className = "option";
+                div.innerText = opt;
+                div.onclick = () => {
+                    document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+                    div.classList.add("selected");
+                    selected = i;
+                };
+                document.getElementById("optionsContainer").appendChild(div);
+            });
+            document.getElementById("progressFill").style.width = (current / questions.length) * 100 + "%";
+        }
+
+        function nextQuestion() {
+            if (selected === null) { alert("Select an option"); return; }
+            if (selected === questions[current].answer) { score++; }
+            current++; selected = null;
+            if (current < questions.length) { loadQuestion(); }
+            else { showResult(); }
+        }
+
+        function showResult() {
+            document.getElementById("quizCard").style.display = "none";
+            document.getElementById("progressWrapper").style.display = "none";
+            document.getElementById("resultSection").style.display = "block";
+
+            let percent = Math.round((score / questions.length) * 100);
+
+            let count = 0;
+            let interval = setInterval(() => {
+                if (count >= percent) { clearInterval(interval); }
+                else {
+                    count++;
+                    document.getElementById("percentText").innerText = count + "%";
+                }
+            }, 15);
+
+            let circle = document.getElementById("circleProgress");
+            let offset = 440 - (440 * percent) / 100;
+            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 200);
+
+            let badge = document.getElementById("statusBadge");
+            if (percent >= 80) {
+                badge.innerText = "Excellent Performance";
+                badge.className = "status-badge status-excellent";
+                launchConfetti();
+            }
+            else if (percent >= 50) {
+                badge.innerText = "Good Performance";
+                badge.className = "status-badge status-good";
+            }
+            else {
+                badge.innerText = "Needs Improvement";
+                badge.className = "status-badge status-poor";
+            }
+
+            document.getElementById("resultText").innerText =
+                "You answered " + score + " out of " + questions.length + " correctly.";
+
+            document.getElementById("strengthList").innerHTML = "";
+            document.getElementById("weakList").innerHTML = "";
+
+            /* Simulated topic scores */
+            let topics = [
+                { name: "Data Structures", score: Math.floor(Math.random() * 40) + 60 },
+                { name: "Algorithms", score: Math.floor(Math.random() * 50) + 40 },
+                { name: "Problem Solving", score: Math.floor(Math.random() * 60) + 30 },
+                { name: "Database", score: Math.floor(Math.random() * 70) + 20 }
+            ];
+
+            topics.forEach(topic => {
+
+                let container = document.createElement("div");
+                container.className = "skill-item";
+
+                let header = document.createElement("div");
+                header.className = "skill-header";
+                header.innerHTML = "<span>" + topic.name + "</span><span>" + topic.score + "%</span>";
+
+                let bar = document.createElement("div");
+                bar.className = "skill-bar";
+
+                let fill = document.createElement("div");
+                fill.className = "skill-fill";
+
+                bar.appendChild(fill);
+                container.appendChild(header);
+                container.appendChild(bar);
+
+                setTimeout(() => { fill.style.width = topic.score + "%"; }, 300);
+
+                if (topic.score >= 70) {
+                    document.getElementById("strengthList").appendChild(container);
+                } else {
+                    document.getElementById("weakList").appendChild(container);
+                }
+
+            });
+
+        }
+
+        function launchConfetti() {
+            for (let i = 0; i < 60; i++) {
+                let c = document.createElement("div");
+                c.style.position = "fixed";
+                c.style.width = "8px";
+                c.style.height = "8px";
+                c.style.background = ["#14c1d7", "#7b2ff7", "#ff9a00"][Math.floor(Math.random() * 3)];
+                c.style.left = Math.random() * 100 + "vw";
+                c.style.top = "-10px";
+                c.style.borderRadius = "50%";
+                c.style.transition = "2s linear";
+                document.body.appendChild(c);
+                setTimeout(() => { c.style.top = "100vh"; }, 50);
+                setTimeout(() => { c.remove(); }, 2000);
+            }
+        }
+
+        setInterval(() => {
+            time--;
+            let m = Math.floor(time / 60);
+            let s = time % 60;
+            document.getElementById("timer").innerText = m + ":" + (s < 10 ? "0" : "") + s;
+            if (time <= 0) { showResult(); }
+        }, 1000);
+
+        loadQuestion();
+
+    </script>
+
+</body>
+
+</html>
